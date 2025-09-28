@@ -1,39 +1,11 @@
-import { useRef, useMemo } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, OrbitControls, Stars, Line } from '@react-three/drei';
+import { Sphere, OrbitControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Earth() {
   const earthRef = useRef<THREE.Mesh>(null);
   
-  const earthTexture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    const context = canvas.getContext('2d')!;
-    
-    // Create Earth-like gradient
-    const gradient = context.createLinearGradient(0, 0, 0, 256);
-    gradient.addColorStop(0, '#1e40af'); // Deep blue for oceans
-    gradient.addColorStop(0.3, '#2563eb');
-    gradient.addColorStop(0.6, '#059669'); // Green for land
-    gradient.addColorStop(0.8, '#16a34a');
-    gradient.addColorStop(1, '#1e40af');
-    
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, 512, 256);
-    
-    // Add some continent-like shapes
-    context.fillStyle = '#059669';
-    context.beginPath();
-    context.arc(100, 100, 30, 0, Math.PI * 2);
-    context.arc(300, 150, 40, 0, Math.PI * 2);
-    context.arc(450, 80, 25, 0, Math.PI * 2);
-    context.fill();
-    
-    return new THREE.CanvasTexture(canvas);
-  }, []);
-
   useFrame(() => {
     if (earthRef.current) {
       earthRef.current.rotation.y += 0.005;
@@ -43,8 +15,8 @@ function Earth() {
   return (
     <Sphere ref={earthRef} args={[1, 64, 64]} position={[0, 0, 0]}>
       <meshStandardMaterial 
-        map={earthTexture} 
-        emissive={new THREE.Color(0x112244)}
+        color="#4285f4"
+        emissive="#001122"
         emissiveIntensity={0.1}
       />
     </Sphere>
@@ -76,32 +48,6 @@ function Asteroid() {
   );
 }
 
-function TrajectoryLine() {
-  const points = useMemo(() => {
-    const curve = new THREE.EllipseCurve(
-      0, 0,
-      3, 3,
-      0, 2 * Math.PI,
-      false,
-      0
-    );
-    
-    return curve.getPoints(100).map(point => 
-      new THREE.Vector3(point.x, 0, point.y)
-    );
-  }, []);
-
-  return (
-    <Line 
-      points={points}
-      color="#00ffff"
-      lineWidth={2}
-      transparent
-      opacity={0.6}
-    />
-  );
-}
-
 interface Earth3DProps {
   className?: string;
 }
@@ -118,7 +64,6 @@ export default function Earth3D({ className }: Earth3DProps) {
         
         <Earth />
         <Asteroid />
-        <TrajectoryLine />
         
         <OrbitControls 
           enableZoom={true}

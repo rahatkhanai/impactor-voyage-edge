@@ -15,11 +15,18 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Cosmic variants for Impactor-2025
+        cosmic: "btn-cosmic text-background font-semibold shadow-lg",
+        hero: "bg-gradient-to-r from-primary via-accent to-secondary text-background font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300",
+        threat: "bg-gradient-to-r from-destructive to-warning text-white font-semibold glow-threat hover:scale-105 transition-all duration-300",
+        success: "bg-gradient-to-r from-success to-primary text-background font-semibold hover:scale-105 transition-all duration-300",
+        glass: "bg-card/20 backdrop-blur-lg border border-border/50 text-foreground hover:bg-card/30 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
+        xl: "h-16 rounded-xl px-12 text-lg",
         icon: "h-10 w-10",
       },
     },

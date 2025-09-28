@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, OrbitControls, Stars } from '@react-three/drei';
+import { Sphere, OrbitControls, Stars, Line } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Earth() {
@@ -86,25 +86,19 @@ function TrajectoryLine() {
       0
     );
     
-    const points3D = curve.getPoints(100).map(point => 
+    return curve.getPoints(100).map(point => 
       new THREE.Vector3(point.x, 0, point.y)
     );
-    
-    return points3D;
   }, []);
 
   return (
-    <line>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={points.length}
-          array={new Float32Array(points.flatMap(p => [p.x, p.y, p.z]))}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineBasicMaterial color="#00ffff" transparent opacity={0.6} linewidth={2} />
-    </line>
+    <Line 
+      points={points}
+      color="#00ffff"
+      lineWidth={2}
+      transparent
+      opacity={0.6}
+    />
   );
 }
 

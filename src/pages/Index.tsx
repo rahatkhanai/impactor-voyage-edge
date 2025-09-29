@@ -6,36 +6,29 @@ import ActTwo from "@/components/ActTwo";
 import ActThree from "@/components/ActThree";
 
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState<"hero" | "act1" | "act2" | "act3" | "act4" | "complete">("hero");
+  const [currentStep, setCurrentStep] = useState<"hero" | "act1" | "act2" | "act3" | "complete">("hero");
 
   const steps = [
     {
       id: "act1",
       title: "Act 1: Knowing the Asteroid",
       description: "Learn about Impactor-2025",
-      completed: currentStep === "act2" || currentStep === "act3" || currentStep === "act4" || currentStep === "complete",
+      completed: currentStep === "act2" || currentStep === "act3" || currentStep === "complete",
       current: currentStep === "act1"
     },
     {
       id: "act2", 
       title: "Act 2: Impact Scenario Simulation",
       description: "Explore impact scenarios",
-      completed: currentStep === "act3" || currentStep === "act4" || currentStep === "complete",
+      completed: currentStep === "act3" || currentStep === "complete",
       current: currentStep === "act2"
     },
     {
       id: "act3",
-      title: "Act 3: Mathematical Calculation of Impact with a Real Map", 
-      description: "Mathematical analysis",
-      completed: currentStep === "act4" || currentStep === "complete",
-      current: currentStep === "act3"
-    },
-    {
-      id: "act4",
-      title: "Act 4: Mitigation Strategies",
+      title: "Act 3: Mitigation Strategies", 
       description: "Defense strategies",
       completed: currentStep === "complete",
-      current: currentStep === "act4"
+      current: currentStep === "act3"
     }
   ];
 
@@ -44,7 +37,7 @@ const Index = () => {
   };
 
   const handleStepClick = (stepId: string) => {
-    if (stepId === "act1" || stepId === "act2" || stepId === "act3" || stepId === "act4") {
+    if (stepId === "act1" || stepId === "act2" || stepId === "act3") {
       setCurrentStep(stepId);
     }
   };
@@ -58,10 +51,6 @@ const Index = () => {
   };
 
   const handleActThreeComplete = () => {
-    setCurrentStep("act4");
-  };
-
-  const handleActFourComplete = () => {
     setCurrentStep("complete");
   };
 
@@ -92,25 +81,6 @@ const Index = () => {
 
       {currentStep === "act3" && (
         <ActThree onComplete={handleActThreeComplete} />
-      )}
-
-      {currentStep === "act4" && (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-8">
-            <div className="space-y-6">
-              <h1 className="text-cosmic-hero">Act 4: Mitigation Strategies</h1>
-              <p className="text-cosmic-subtitle max-w-2xl mx-auto">
-                Explore planetary defense strategies and learn how we can protect Earth from asteroid impacts.
-              </p>
-            </div>
-            <button 
-              onClick={handleActFourComplete}
-              className="btn-cosmic-primary"
-            >
-              Complete Mission
-            </button>
-          </div>
-        </div>
       )}
 
       {/* Mission Complete */}

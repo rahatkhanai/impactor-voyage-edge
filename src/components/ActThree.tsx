@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Rocket, Orbit, Sun, Zap, Shield, Target, Gauge, Clock } from "lucide-react";
+import { Rocket, Zap, Sun, Satellite } from "lucide-react";
 
 interface ActThreeProps {
   onComplete: () => void;
@@ -11,253 +10,180 @@ const mitigationStrategies = [
   {
     id: "kinetic",
     title: "Kinetic Impactor",
-    emoji: "🚀",
-    tagline: "The Space Bumper Car",
-    headline: "Crash and Deflect",
+    subtitle: "The Space Bumper Car",
+    description: "A spacecraft slams into the asteroid at high speed, nudging it into a safer orbit. Tested by NASA's DART mission in 2022.",
+    keywords: "spacecraft impact, asteroid deflection, momentum transfer, shockwave arrows",
     icon: Rocket,
-    color: "from-blue-500/20 to-cyan-500/20",
-    borderColor: "border-blue-500/30",
-    textColor: "text-blue-400",
-    howItWorks: "A spacecraft is launched directly at the asteroid and crashes into it at very high speed. The collision transfers energy (momentum) to the asteroid, nudging it onto a slightly different path.",
-    whyEffective: "Even a small orbital shift, if done years before the predicted impact, makes the asteroid miss Earth entirely.",
-    realExample: "In 2022, NASA's DART mission successfully hit the asteroid moonlet Dimorphos and changed its orbit — the first real-world test of this idea.",
-    bestFor: "Small-to-medium asteroids with enough warning time.",
-    infographics: ["spacecraft crashing into asteroid", "arrows showing orbital shift", "NASA DART mission logo", "Dimorphos orbit diagram"]
+    color: "from-blue-400 to-cyan-400",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-400/30",
+    hoverBg: "hover:bg-blue-500/20"
   },
   {
-    id: "gravity",
+    id: "gravitational",
     title: "Gravitational Tractor",
-    emoji: "🌌",
-    tagline: "The Space Tugboat",
-    headline: "Gentle Gravitational Pull",
-    icon: Orbit,
-    color: "from-purple-500/20 to-indigo-500/20",
-    borderColor: "border-purple-500/30",
-    textColor: "text-purple-400",
-    howItWorks: "A heavy spacecraft parks itself close to the asteroid and hovers there. The spacecraft's gravity pulls slightly on the asteroid. Over many years, this 'gravitational tug' slowly shifts the asteroid's path.",
-    whyEffective: "It doesn't rely on hitting or blowing up the asteroid — it's precise and controlled.",
-    challenges: "Requires decades of time and highly stable hovering technology.",
-    bestFor: "Asteroids detected many decades in advance.",
-    infographics: ["spacecraft hovering near asteroid", "curved gravitational pull lines", "slow orbital change arrows", "tractor tug animation metaphor"]
+    subtitle: "The Space Tugboat", 
+    description: "A nearby spacecraft slowly tugs the asteroid using gravity alone. Gentle but steady pull over years.",
+    keywords: "hovering spacecraft, gravity field lines, asteroid path curve, tractor beam style pull",
+    icon: Satellite,
+    color: "from-purple-400 to-indigo-400",
+    bgColor: "bg-purple-500/10",
+    borderColor: "border-purple-400/30",
+    hoverBg: "hover:bg-purple-500/20"
   },
   {
     id: "solar",
     title: "Solar Sails",
-    emoji: "☀️",
-    tagline: "The Space Wind Push",
-    headline: "Sunlight as a Push",
+    subtitle: "The Space Wind Push",
+    description: "Huge reflective sails push the asteroid with sunlight. Small force, long time, big results.",
+    keywords: "large reflective sail, solar rays bouncing, gentle push arrows, glowing sun",
     icon: Sun,
-    color: "from-yellow-500/20 to-orange-500/20",
-    borderColor: "border-yellow-500/30",
-    textColor: "text-yellow-400",
-    howItWorks: "A giant reflective sail is attached to or deployed near the asteroid. Sunlight bounces off the sail, and the tiny pressure from light particles (photons) gently pushes the asteroid.",
-    whyEffective: "The push is weak, but constant. Over years, it can significantly change the orbit.",
-    challenges: "Needs very lightweight but massive sails, and very long lead times.",
-    bestFor: "Small asteroids with lots of warning time.",
-    infographics: ["huge reflective sail next to asteroid", "beams of sunlight bouncing", "orbit shift arrows", "futuristic mirror-like visuals"]
+    color: "from-yellow-400 to-orange-400", 
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-400/30",
+    hoverBg: "hover:bg-yellow-500/20"
   },
   {
     id: "laser",
     title: "Laser Ablation",
-    emoji: "🔦",
-    tagline: "The Space Blowtorch",
-    headline: "The Laser Torch",
+    subtitle: "The Space Blowtorch",
+    description: "Powerful lasers vaporize asteroid surface, creating jets of gas that push it off course.",
+    keywords: "laser beams, asteroid surface vapor, thrust jet arrows, glowing hot spots",
     icon: Zap,
-    color: "from-red-500/20 to-pink-500/20",
-    borderColor: "border-red-500/30",
-    textColor: "text-red-400",
-    howItWorks: "Powerful lasers (from spacecraft or Earth) heat the asteroid's surface until rock vaporizes. Escaping gas jets act like thrusters, slowly pushing the asteroid away.",
-    whyEffective: "It's very precise and works without touching the asteroid.",
-    challenges: "Needs huge amounts of power and long operation time. Works better on smaller asteroids.",
-    bestFor: "Medium asteroids where we have years to apply steady force.",
-    infographics: ["giant laser beam hitting asteroid", "vapor plume jet pushing asteroid", "thrust arrows", "asteroid steaming effect"]
+    color: "from-red-400 to-pink-400",
+    bgColor: "bg-red-500/10", 
+    borderColor: "border-red-400/30",
+    hoverBg: "hover:bg-red-500/20"
   }
 ];
 
 export default function ActThree({ onComplete }: ActThreeProps) {
-  const [selectedStrategy, setSelectedStrategy] = useState<string | null>(null);
-  const [selectedPoll, setSelectedPoll] = useState<string | null>(null);
-
-  const handleCardClick = (strategyId: string) => {
-    setSelectedStrategy(selectedStrategy === strategyId ? null : strategyId);
-  };
-
-  const selectedStrategyData = mitigationStrategies.find(s => s.id === selectedStrategy);
+  const [hoveredStrategy, setHoveredStrategy] = useState<string | null>(null);
+  const [clickedStrategy, setClickedStrategy] = useState<string | null>(null);
 
   return (
-    <section className="relative min-h-screen py-20">
-      <div className="container mx-auto px-6">
-        
-        {/* Top Section */}
+    <section className="relative min-h-screen py-20 bg-gradient-to-b from-background via-background/95 to-background">
+      {/* Starry background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-10 left-10 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+        <div className="absolute top-20 right-20 w-1 h-1 bg-white rounded-full animate-pulse delay-1000"></div>
+        <div className="absolute top-40 left-1/4 w-1 h-1 bg-white rounded-full animate-pulse delay-500"></div>
+        <div className="absolute top-60 right-1/3 w-1 h-1 bg-white rounded-full animate-pulse delay-700"></div>
+        <div className="absolute bottom-40 left-1/3 w-1 h-1 bg-white rounded-full animate-pulse delay-300"></div>
+        <div className="absolute bottom-60 right-1/4 w-1 h-1 bg-white rounded-full animate-pulse delay-900"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center mb-6">
-            <Shield className="w-16 h-16 text-primary mr-4" />
-            <div className="w-16 h-16 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-primary animate-pulse" />
-            </div>
-          </div>
-          
-          <h1 className="text-cosmic-hero mb-6">
+          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Can We Stop an Asteroid?
           </h1>
-          
-          <p className="text-cosmic-subtitle max-w-3xl mx-auto">
-            Scientists have developed several strategies to protect Earth. Let's explore four of them.
+          <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
+            Scientists have developed several strategies to protect Earth.<br />
+            Let's explore four of them.
           </p>
         </div>
 
-        {/* Four Interactive Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {/* Strategy Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
           {mitigationStrategies.map((strategy) => {
             const IconComponent = strategy.icon;
-            const isSelected = selectedStrategy === strategy.id;
+            const isHovered = hoveredStrategy === strategy.id;
+            const isClicked = clickedStrategy === strategy.id;
             
             return (
-              <Card 
+              <div
                 key={strategy.id}
-                className={`cursor-pointer transition-all duration-300 hover:scale-105 card-cosmic ${
-                  isSelected ? 'ring-2 ring-primary scale-105' : ''
-                }`}
-                onClick={() => handleCardClick(strategy.id)}
+                className={`group relative p-8 rounded-2xl border-2 transition-all duration-500 cursor-pointer
+                  ${strategy.bgColor} ${strategy.borderColor} ${strategy.hoverBg}
+                  ${isHovered ? 'scale-105 shadow-2xl' : 'hover:scale-102'}
+                  ${isClicked ? 'ring-2 ring-primary' : ''}
+                `}
+                onMouseEnter={() => setHoveredStrategy(strategy.id)}
+                onMouseLeave={() => setHoveredStrategy(null)}
+                onClick={() => setClickedStrategy(clickedStrategy === strategy.id ? null : strategy.id)}
               >
-                <CardContent className="p-6 text-center">
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${strategy.color} border ${strategy.borderColor} mx-auto mb-4 flex items-center justify-center`}>
-                    <IconComponent className={`w-8 h-8 ${strategy.textColor}`} />
+                {/* Background illustration area */}
+                <div className="relative h-48 mb-6 rounded-xl bg-gradient-to-br from-card/20 to-card/5 overflow-hidden">
+                  {/* Icon */}
+                  <div className={`absolute top-6 left-6 w-16 h-16 rounded-full bg-gradient-to-br ${strategy.color} flex items-center justify-center`}>
+                    <IconComponent className="w-8 h-8 text-white" />
                   </div>
                   
-                  <h3 className="font-bold text-foreground mb-2">{strategy.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">{strategy.tagline}</p>
-                  <div className="text-2xl">{strategy.emoji}</div>
-                </CardContent>
-              </Card>
+                  {/* Simple illustration based on strategy */}
+                  {strategy.id === 'kinetic' && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className={`w-20 h-12 rounded-full bg-gray-600 ${isHovered ? 'animate-pulse' : ''}`}></div>
+                      <div className={`w-8 h-4 bg-gradient-to-r ${strategy.color} rounded-full ml-2 ${isHovered ? 'translate-x-4' : ''} transition-transform duration-500`}></div>
+                      {isHovered && (
+                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
+                  {strategy.id === 'gravitational' && (
+                    <div className="absolute inset-0 flex items-center justify-center space-x-8">
+                      <div className={`w-6 h-6 bg-gradient-to-r ${strategy.color} rounded-full ${isHovered ? 'animate-pulse' : ''}`}></div>
+                      <div className="relative">
+                        <div className="w-16 h-10 rounded-full bg-gray-600"></div>
+                        {isHovered && (
+                          <div className="absolute inset-0 rounded-full border-2 border-dashed border-purple-400 animate-spin"></div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {strategy.id === 'solar' && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-10 rounded-full bg-gray-600"></div>
+                      <div className={`w-12 h-16 bg-gradient-to-b ${strategy.color} opacity-70 ml-4 transform skew-x-12 ${isHovered ? 'scale-110' : ''} transition-transform duration-500`}></div>
+                      {isHovered && (
+                        <div className="absolute top-4 right-4 w-4 h-4 bg-yellow-400 rounded-full animate-ping"></div>
+                      )}
+                    </div>
+                  )}
+                  
+                  {strategy.id === 'laser' && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative w-16 h-10 rounded-full bg-gray-600">
+                        {isHovered && (
+                          <>
+                            <div className="absolute top-0 right-0 w-1 h-8 bg-red-400 transform rotate-45 origin-bottom"></div>
+                            <div className="absolute top-2 right-2 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{strategy.title}</h3>
+                  <p className="text-lg text-foreground/70 mb-4">{strategy.subtitle}</p>
+                  <p className="text-sm text-foreground/60 leading-relaxed">{strategy.description}</p>
+                  
+                  {/* Infographic keywords */}
+                  <div className="mt-4 pt-4 border-t border-border/30">
+                    <p className="text-xs text-foreground/50 italic">{strategy.keywords}</p>
+                  </div>
+                </div>
+
+                {/* Interaction indicator */}
+                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="text-xs text-foreground/50 bg-card/80 px-2 py-1 rounded">
+                    {strategy.id === 'solar' ? 'Click to interact' : 'Hover to see effect'}
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* Expanded Content */}
-        {selectedStrategyData && (
-          <div className="card-cosmic p-8 mb-12 animate-fade-in">
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Left Column - Content */}
-              <div className="space-y-6">
-                <div>
-                  <h2 className={`text-3xl font-bold ${selectedStrategyData.textColor} mb-2`}>
-                    {selectedStrategyData.headline}
-                  </h2>
-                  <h3 className="text-xl text-muted-foreground">{selectedStrategyData.tagline}</h3>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-foreground mb-2 flex items-center">
-                    <Target className="w-5 h-5 mr-2" />
-                    How it Works:
-                  </h4>
-                  <p className="text-muted-foreground">{selectedStrategyData.howItWorks}</p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-foreground mb-2 flex items-center">
-                    <Gauge className="w-5 h-5 mr-2" />
-                    Why it's Effective:
-                  </h4>
-                  <p className="text-muted-foreground">{selectedStrategyData.whyEffective}</p>
-                </div>
-
-                {selectedStrategyData.realExample && (
-                  <div>
-                    <h4 className="font-bold text-foreground mb-2">Real Example:</h4>
-                    <p className="text-muted-foreground">{selectedStrategyData.realExample}</p>
-                  </div>
-                )}
-
-                {selectedStrategyData.challenges && (
-                  <div>
-                    <h4 className="font-bold text-foreground mb-2">Challenges:</h4>
-                    <p className="text-muted-foreground">{selectedStrategyData.challenges}</p>
-                  </div>
-                )}
-
-                <div>
-                  <h4 className="font-bold text-foreground mb-2 flex items-center">
-                    <Clock className="w-5 h-5 mr-2" />
-                    Best For:
-                  </h4>
-                  <p className="text-muted-foreground">{selectedStrategyData.bestFor}</p>
-                </div>
-              </div>
-
-              {/* Right Column - Visual Placeholder */}
-              <div className="space-y-4">
-                <div className={`h-48 rounded-lg bg-gradient-to-br ${selectedStrategyData.color} border ${selectedStrategyData.borderColor} flex items-center justify-center`}>
-                  <div className="text-center">
-                    <div className={`text-6xl ${selectedStrategyData.textColor} mb-2`}>{selectedStrategyData.emoji}</div>
-                    <div className={`text-sm font-semibold ${selectedStrategyData.textColor}`}>
-                      Animation Placeholder
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  {selectedStrategyData.infographics.map((infographic, index) => (
-                    <div key={index} className="text-xs text-muted-foreground p-2 bg-card/50 rounded border">
-                      {infographic}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Strategy Comparison */}
-        <div className="card-cosmic p-8 mb-12">
-          <h3 className="text-2xl font-bold text-foreground mb-8 text-center">
-            Strategy Comparison
-          </h3>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mitigationStrategies.map((strategy) => (
-              <div key={strategy.id} className="text-center space-y-3">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${strategy.color} border ${strategy.borderColor} mx-auto flex items-center justify-center`}>
-                  <strategy.icon className={`w-6 h-6 ${strategy.textColor}`} />
-                </div>
-                <h4 className="font-bold text-foreground">{strategy.title}</h4>
-                <p className="text-sm text-muted-foreground">{strategy.tagline}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Interactive Poll */}
-        <div className="card-cosmic p-8 mb-12">
-          <h3 className="text-xl font-bold text-foreground mb-6 text-center">
-            Which method would YOU choose to save Earth?
-          </h3>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mitigationStrategies.map((strategy) => (
-              <Button
-                key={strategy.id}
-                variant={selectedPoll === strategy.id ? "default" : "outline"}
-                className="h-auto p-4 flex flex-col items-center space-y-2"
-                onClick={() => setSelectedPoll(strategy.id)}
-              >
-                <div className="text-2xl">{strategy.emoji}</div>
-                <div className="text-sm font-semibold">{strategy.title}</div>
-              </Button>
-            ))}
-          </div>
-          
-          {selectedPoll && (
-            <div className="mt-6 text-center">
-              <p className="text-success font-semibold">
-                Great choice! {mitigationStrategies.find(s => s.id === selectedPoll)?.title} is an excellent defense strategy.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Complete Mission */}
+        {/* Bottom section */}
         <div className="text-center space-y-6">
           <Button 
             variant="hero" 
@@ -265,18 +191,11 @@ export default function ActThree({ onComplete }: ActThreeProps) {
             onClick={onComplete}
             className="glow-primary"
           >
-            Mission Complete
+            Continue Mission
           </Button>
           
-          <Button 
-            variant="glass" 
-            size="lg"
-          >
-            Play Defend Earth Game
-          </Button>
-          
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            Continue exploring with our interactive defense simulation game
+          <p className="text-sm text-foreground/60 max-w-md mx-auto">
+            These are the main strategies scientists use to defend Earth from asteroid impacts
           </p>
         </div>
       </div>

@@ -9,10 +9,9 @@ interface ActThreeProps {
 const mitigationStrategies = [
   {
     id: "kinetic",
-    title: "Kinetic Impactor",
-    subtitle: "The Space Bumper Car",
-    description: "A spacecraft slams into the asteroid at high speed, nudging it into a safer orbit. Tested by NASA's DART mission in 2022.",
-    keywords: "spacecraft impact, asteroid deflection, momentum transfer, shockwave arrows",
+    title: "🚀 Kinetic Impactor",
+    description: "This strategy involves sending a spacecraft to crash directly into the asteroid at very high speed. The impact transfers momentum to the asteroid, nudging it slightly off its original path. Even a small deflection can make a big difference if done years before a potential impact.",
+    video: "/videos/kinetic_impactor.mp4",
     icon: Rocket,
     color: "from-blue-400 to-cyan-400",
     bgColor: "bg-blue-500/10",
@@ -20,11 +19,21 @@ const mitigationStrategies = [
     hoverBg: "hover:bg-blue-500/20"
   },
   {
-    id: "gravitational",
-    title: "Gravitational Tractor",
-    subtitle: "The Space Tugboat", 
-    description: "A nearby spacecraft slowly tugs the asteroid using gravity alone. Gentle but steady pull over years.",
-    keywords: "hovering spacecraft, gravity field lines, asteroid path curve, tractor beam style pull",
+    id: "nuclear",
+    title: "☢️ Nuclear Detonation",
+    description: "In this method, a nuclear device is detonated close to the asteroid's surface—not to blow it up, but to vaporize part of it. The intense heat creates a burst of energy that pushes the asteroid onto a safer trajectory. It's one of the most powerful and last-resort options.",
+    video: "/videos/nuclear_detonation.mp4",
+    icon: Zap,
+    color: "from-orange-400 to-red-400",
+    bgColor: "bg-orange-500/10",
+    borderColor: "border-orange-400/30",
+    hoverBg: "hover:bg-orange-500/20"
+  },
+  {
+    id: "gravity",
+    title: "🌌 Gravity Tractor",
+    description: "A spacecraft flies alongside the asteroid for months or years, using its own tiny gravitational pull to slowly tug the asteroid off course. This method is very precise and controlled, though it requires a long lead time to work effectively.",
+    video: "/videos/gravity_tractor.mp4",
     icon: Satellite,
     color: "from-purple-400 to-indigo-400",
     bgColor: "bg-purple-500/10",
@@ -32,23 +41,10 @@ const mitigationStrategies = [
     hoverBg: "hover:bg-purple-500/20"
   },
   {
-    id: "solar",
-    title: "Solar Sails",
-    subtitle: "The Space Wind Push",
-    description: "Huge reflective sails push the asteroid with sunlight. Small force, long time, big results.",
-    keywords: "large reflective sail, solar rays bouncing, gentle push arrows, glowing sun",
-    icon: Sun,
-    color: "from-yellow-400 to-orange-400", 
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-400/30",
-    hoverBg: "hover:bg-yellow-500/20"
-  },
-  {
     id: "laser",
-    title: "Laser Ablation",
-    subtitle: "The Space Blowtorch",
-    description: "Powerful lasers vaporize asteroid surface, creating jets of gas that push it off course.",
-    keywords: "laser beams, asteroid surface vapor, thrust jet arrows, glowing hot spots",
+    title: "🔥 Laser Ablation",
+    description: "High-powered lasers are aimed at the asteroid's surface, heating it until material vaporizes and shoots off like a small rocket jet. This creates a steady push that gradually shifts the asteroid's path without requiring a big collision or explosion.",
+    video: "/videos/laser_ablation.mp4",
     icon: Zap,
     color: "from-red-400 to-pink-400",
     bgColor: "bg-red-500/10", 
@@ -104,79 +100,27 @@ export default function ActThree({ onComplete }: ActThreeProps) {
                 onMouseLeave={() => setHoveredStrategy(null)}
                 onClick={() => setClickedStrategy(clickedStrategy === strategy.id ? null : strategy.id)}
               >
-                {/* Background illustration area */}
+                {/* Video area */}
                 <div className="relative h-48 mb-6 rounded-xl bg-gradient-to-br from-card/20 to-card/5 overflow-hidden">
-                  {/* Icon */}
-                  <div className={`absolute top-6 left-6 w-16 h-16 rounded-full bg-gradient-to-br ${strategy.color} flex items-center justify-center`}>
-                    <IconComponent className="w-8 h-8 text-white" />
+                  <video 
+                    src={strategy.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Icon overlay */}
+                  <div className={`absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br ${strategy.color} flex items-center justify-center shadow-lg`}>
+                    <IconComponent className="w-6 h-6 text-white" />
                   </div>
-                  
-                  {/* Simple illustration based on strategy */}
-                  {strategy.id === 'kinetic' && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className={`w-20 h-12 rounded-full bg-gray-600 ${isHovered ? 'animate-pulse' : ''}`}></div>
-                      <div className={`w-8 h-4 bg-gradient-to-r ${strategy.color} rounded-full ml-2 ${isHovered ? 'translate-x-4' : ''} transition-transform duration-500`}></div>
-                      {isHovered && (
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                          <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  
-                  {strategy.id === 'gravitational' && (
-                    <div className="absolute inset-0 flex items-center justify-center space-x-8">
-                      <div className={`w-6 h-6 bg-gradient-to-r ${strategy.color} rounded-full ${isHovered ? 'animate-pulse' : ''}`}></div>
-                      <div className="relative">
-                        <div className="w-16 h-10 rounded-full bg-gray-600"></div>
-                        {isHovered && (
-                          <div className="absolute inset-0 rounded-full border-2 border-dashed border-purple-400 animate-spin"></div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {strategy.id === 'solar' && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-10 rounded-full bg-gray-600"></div>
-                      <div className={`w-12 h-16 bg-gradient-to-b ${strategy.color} opacity-70 ml-4 transform skew-x-12 ${isHovered ? 'scale-110' : ''} transition-transform duration-500`}></div>
-                      {isHovered && (
-                        <div className="absolute top-4 right-4 w-4 h-4 bg-yellow-400 rounded-full animate-ping"></div>
-                      )}
-                    </div>
-                  )}
-                  
-                  {strategy.id === 'laser' && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative w-16 h-10 rounded-full bg-gray-600">
-                        {isHovered && (
-                          <>
-                            <div className="absolute top-0 right-0 w-1 h-8 bg-red-400 transform rotate-45 origin-bottom"></div>
-                            <div className="absolute top-2 right-2 w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* Content */}
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{strategy.title}</h3>
-                  <p className="text-lg text-foreground/70 mb-4">{strategy.subtitle}</p>
-                  <p className="text-sm text-foreground/60 leading-relaxed">{strategy.description}</p>
-                  
-                  {/* Infographic keywords */}
-                  <div className="mt-4 pt-4 border-t border-border/30">
-                    <p className="text-xs text-foreground/50 italic">{strategy.keywords}</p>
-                  </div>
-                </div>
-
-                {/* Interaction indicator */}
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="text-xs text-foreground/50 bg-card/80 px-2 py-1 rounded">
-                    {strategy.id === 'solar' ? 'Click to interact' : 'Hover to see effect'}
-                  </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">{strategy.title}</h3>
+                  <p className="text-sm text-foreground/70 leading-relaxed">{strategy.description}</p>
                 </div>
               </div>
             );

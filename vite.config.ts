@@ -15,4 +15,12 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: [
+      "gsap",
+      "@radix-ui/react-tooltip",
+      "react",
+      "react-dom"
+    ],
+  },
 }));

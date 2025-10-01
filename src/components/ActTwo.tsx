@@ -460,7 +460,7 @@ export default function ActTwo({ onContinue }: ActTwoProps) {
             onClick={onContinue}
             className="glow-primary"
           >
-            Continue to Mathematical Analysis →
+            Want to save the world? →
           </Button>
         </div>
       </div>

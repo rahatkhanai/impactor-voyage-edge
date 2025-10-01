@@ -4,7 +4,7 @@ import TourStepper from "@/components/TourStepper";
 import ActOne from "@/components/ActOne";
 import ActTwo from "@/components/ActTwo";
 import ActThree from "@/components/ActThree";
-import SplashScreen from "@/components/SplashScreen";
+import AnimatedSplashScreen from "@/components/AnimatedSplashScreen";
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -58,7 +58,7 @@ const Index = () => {
 
   return (
     <>
-      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+      {showSplash && <AnimatedSplashScreen onComplete={() => setShowSplash(false)} />}
       
       <main className="min-h-screen bg-background overflow-x-hidden">
         {/* Hero Section */}

@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Atom, Zap, Telescope } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ActOneProps {
   onContinue: () => void;
 }
 
 export default function ActOne({ onContinue }: ActOneProps) {
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6">
       <div className="container mx-auto max-w-4xl space-y-12">
@@ -64,12 +67,15 @@ export default function ActOne({ onContinue }: ActOneProps) {
           </div>
         </div>
 
-        {/* Infographic Box #3 - 3D Simulation */}
-        <div className="card-cosmic p-8 animate-fade-in hover:shadow-cosmic transition-all duration-300">
+        {/* Infographic Box #3 - 3D Simulation Gateway */}
+        <div 
+          onClick={() => navigate('/orbit-simulation')}
+          className="card-cosmic p-8 animate-fade-in hover:shadow-cosmic transition-all duration-300 cursor-pointer group hover:scale-[1.02]"
+        >
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-1/2 space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/30">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border border-primary/30 group-hover:scale-110 transition-transform">
                   <Telescope className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-foreground">
@@ -77,15 +83,20 @@ export default function ActOne({ onContinue }: ActOneProps) {
                 </h3>
               </div>
               <p className="text-muted-foreground">
-                Click on any asteroid to see its orbit.
+                Click here to explore the 3D orbit simulation and track real asteroids.
               </p>
+              <div className="inline-flex items-center gap-2 text-primary font-semibold">
+                <span>Launch 3D Simulation</span>
+                <span className="group-hover:translate-x-2 transition-transform">→</span>
+              </div>
             </div>
             <div className="lg:w-1/2">
-              <div className="bg-card/50 rounded-xl border border-border/50 h-64 flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <Telescope className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p className="text-sm">3D Orbit Simulation Here</p>
-                  <p className="text-xs mt-1 opacity-75">(Interactive simulation placeholder)</p>
+              <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl border border-primary/30 h-64 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(102,126,234,0.1)_0%,transparent_70%)] animate-pulse-glow" />
+                <div className="text-center text-foreground relative z-10">
+                  <Telescope className="w-16 h-16 mx-auto mb-3 text-primary animate-float" />
+                  <p className="text-lg font-bold">Interactive 3D Solar System</p>
+                  <p className="text-sm mt-2 opacity-75">Click to explore asteroid orbits</p>
                 </div>
               </div>
             </div>

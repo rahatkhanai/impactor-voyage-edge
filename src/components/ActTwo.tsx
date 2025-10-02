@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useNavigate } from "react-router-dom";
 import { 
   Flame, 
   Globe, 
@@ -156,6 +157,7 @@ const scenarios: Record<string, ScenarioData> = {
 };
 
 export default function ActTwo({ onContinue }: ActTwoProps) {
+  const navigate = useNavigate();
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
   const [sliderValues, setSliderValues] = useState<Record<string, number>>({});
   const scenarioDetailRef = useRef<HTMLDivElement>(null);
@@ -388,33 +390,34 @@ export default function ActTwo({ onContinue }: ActTwoProps) {
 
             {/* Interactive Simulation Area */}
             <div className="grid lg:grid-cols-2 gap-8">
-              {/* Left Column: Sliders */}
+              {/* Left Column: Custom Impact Calculator */}
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-foreground mb-4">
-                  Interactive Parameters
+                  See Impacts in Your Home
                 </h3>
                 
-                {scenarios[selectedScenario].sliders.map((slider, index) => (
-                  <div key={index} className="space-y-3">
-                    <label className="text-sm font-semibold text-muted-foreground">
-                      {slider.name}: {sliderValues[slider.name] || slider.default}{slider.unit}
-                    </label>
-                    <Slider
-                      value={[sliderValues[slider.name] || slider.default]}
-                      onValueChange={(value) => 
-                        setSliderValues(prev => ({ ...prev, [slider.name]: value[0] }))
-                      }
-                      min={slider.min}
-                      max={slider.max}
-                      step={1}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>{slider.min}{slider.unit}</span>
-                      <span>{slider.max}{slider.unit}</span>
-                    </div>
-                  </div>
-                ))}
+                <p className="text-muted-foreground mb-6">
+                  Want to see what would happen if an asteroid hit your location? 
+                  Use our interactive calculator to select your home on the map and see detailed impact analysis.
+                </p>
+
+                <Button
+                  onClick={() => navigate('/impact-calculator')}
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-warning to-destructive hover:opacity-90 text-white font-bold py-6 text-lg"
+                >
+                  🏠 Click here to see impacts in your home
+                </Button>
+
+                <div className="mt-6 p-4 bg-muted/20 rounded-lg border border-border/50">
+                  <h4 className="font-semibold mb-2 text-sm">You'll be able to:</h4>
+                  <ul className="text-xs text-muted-foreground space-y-1">
+                    <li>• Select any location on Earth</li>
+                    <li>• Customize asteroid parameters</li>
+                    <li>• View detailed impact analysis</li>
+                    <li>• See tsunami and damage predictions</li>
+                  </ul>
+                </div>
               </div>
 
               {/* Right Column: Video Simulation */}

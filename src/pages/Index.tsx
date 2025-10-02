@@ -4,10 +4,8 @@ import TourStepper from "@/components/TourStepper";
 import ActOne from "@/components/ActOne";
 import ActTwo from "@/components/ActTwo";
 import ActThree from "@/components/ActThree";
-import AnimatedSplashScreen from "@/components/AnimatedSplashScreen";
 
 const Index = () => {
-  const [showSplash, setShowSplash] = useState(true);
   const [currentStep, setCurrentStep] = useState<"hero" | "act1" | "act2" | "act3" | "complete">("hero");
 
   const steps = [
@@ -57,10 +55,7 @@ const Index = () => {
   };
 
   return (
-    <>
-      {showSplash && <AnimatedSplashScreen onComplete={() => setShowSplash(false)} />}
-      
-      <main className="min-h-screen bg-background overflow-x-hidden">
+    <main className="min-h-screen bg-background overflow-x-hidden">
         {/* Hero Section */}
         {currentStep === "hero" && (
           <HeroSection onStartTour={handleStartTour} />
@@ -158,7 +153,6 @@ const Index = () => {
         </div>
       </footer>
     </main>
-    </>
   );
 };
 
